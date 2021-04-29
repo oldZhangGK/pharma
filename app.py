@@ -220,6 +220,7 @@ def userUpdate():
         content = request.form['subject']
         
         # new msg send
+        # updated mail
         new_msg = "Email: " + email + "\n" + "Drug code: " + drugcode + "\n" + "Code type: " + codetype + "\n" + "Content: " + content + "\n"
         server = smtplib.SMTP("smtp.office365.com")
         server.starttls()
