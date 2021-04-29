@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.automap import automap_base
 from flask_mail import Mail, Message
+import smtplib
 import re
 
 app = Flask(__name__)
@@ -40,7 +41,7 @@ app.config['MAIL_SERVER'] = 'smtp.office365.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = admin_email
 app.config['MAIL_PASSWORD'] = admin_email_pass
-app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
@@ -217,6 +218,14 @@ def userUpdate():
         drugcode = request.form['drugcode']
         codetype = request.form['codetype']
         content = request.form['subject']
+        
+        # new msg send
+        new_msg = "Email: " + email + "\n" + "Drug code: " + drugcode + "\n" + "Code type: " + codetype + "\n" + "Content: " + content + "\n"
+        server = smtplib.SMTP("smtp.office365.com")
+        server.starttls()
+        server.login(admin_email, admin_email_pass)
+        server.sendmail(admin_email, admin_email, new_msg)
+
         if email == '':
             if drugcode == '' and content == '':
                     message = "⚠️Please fill out all required field!"
