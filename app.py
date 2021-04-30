@@ -221,11 +221,6 @@ def userUpdate():
         
         # new msg send
         # updated mail
-        new_msg = "Email: " + email + "\n" + "Drug code: " + drugcode + "\n" + "Code type: " + codetype + "\n" + "Content: " + content + "\n"
-        server = smtplib.SMTP("smtp.office365.com")
-        server.starttls()
-        server.login(admin_email, admin_email_pass)
-        server.sendmail(admin_email, admin_email, new_msg)
 
         if email == '':
             if drugcode == '' and content == '':
@@ -247,17 +242,23 @@ def userUpdate():
                 elif drugcode == '' and content != '':
                     message = "⚠️Please fill out Drug Code!"
                 else:
-                    results = db.session.query(Admin.EMAIL).all()
-                    admin_email = results[0][0]
-                    title = "Update Request From User: " + email
-                    msg = Message(title, sender = email, recipients = [admin_email])
-                    msg.body = "You have received a new message. Here are the details:\n Requested update drugcode:  \n " + drugcode + "\nRequested update code type:" + codetype + "\n Detailed message:" + content +"\n"
-                    mail.send(msg)
-                    title1 = "Thank you for using PharmaSearch"
-                    msg1 = Message(title1, sender = admin_email, recipients = [email])
-                    msg1.body = "<html><h1>Hi, "+email+"</h1><p>Thank you for using PharmaSearch. We have received your request! We will contact to you soon!</p><p>Here is the copy of your submitted request:\n Requested update drugcode:  \n " + drugcode + "\nRequested update code type:" + codetype + "\n Detailed message:" + content +"\n</p>"
-                    mail.send(msg1)
-                    message = "We have received your request! We will contact to you soon!"
+                    # results = db.session.query(Admin.EMAIL).all()
+                    # admin_email = results[0][0]
+                    # title = "Update Request From User: " + email
+                    # msg = Message(title, sender = email, recipients = [admin_email])
+                    # msg.body = "You have received a new message. Here are the details:\n Requested update drugcode:  \n " + drugcode + "\nRequested update code type:" + codetype + "\n Detailed message:" + content +"\n"
+                    # mail.send(msg)
+                    # title1 = "Thank you for using PharmaSearch"
+                    # msg1 = Message(title1, sender = admin_email, recipients = [email])
+                    # msg1.body = "<html><h1>Hi, "+email+"</h1><p>Thank you for using PharmaSearch. We have received your request! We will contact to you soon!</p><p>Here is the copy of your submitted request:\n Requested update drugcode:  \n " + drugcode + "\nRequested update code type:" + codetype + "\n Detailed message:" + content +"\n</p>"
+                    # mail.send(msg1)
+                    # message = "We have received your request! We will contact to you soon!"
+                    new_msg = "Email: " + email + "\n" + "Drug code: " + drugcode + "\n" + "Code type: " + codetype + "\n" + "Content: " + content + "\n"
+                    server = smtplib.SMTP('smtp.gmail.com',587)
+                    server.starttls()
+                    server.login(admin_email, admin_email_pass)
+                    server.sendmail(admin_email, admin_email, new_msg)
+                    server.quit()
     return render_template('user_success.html', message = message)
         
 
